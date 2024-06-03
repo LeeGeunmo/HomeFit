@@ -92,17 +92,9 @@ def saveExerciseSet(request):
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'fail'}, status=400)
 
-# def statAll(request, first_exercise_id = None): #오늘 처음 시작한 운동의 id를 저장, 그 운동의 시간부터 지금까지 운동 가져오기
-#     if first_exercise_id:
-#         first_exercise_date = ExerciseSet.objects.filter(id=first_exercise_id).date
-#         print(first_exercise_date)
+def statAll(request, first_exercise_id = None): #오늘 처음 시작한 운동의 id를 저장, 그 운동의 시간부터 지금까지 운동 가져오기
+    # if first_exercise_id:
+    #     first_exercise_date = ExerciseSet.objects.filter(id=first_exercise_id).date
+    #     print(first_exercise_date)
         
-#     return render(request, 'fitness/workoutResult.html')
-
-def isRun(request):
-    user = request.user
-    if user.fitness_goal == 'diet':
-        return True
-    else:
-        return False
-        
+    return render(request, 'fitness/dailyStatistics.html')
