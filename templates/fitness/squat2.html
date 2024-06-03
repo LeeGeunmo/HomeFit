@@ -81,25 +81,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teachable Machine Pose Model</title>
-    <script>
-        function loadHTML(file, elementId) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    document.getElementById(elementId).innerHTML = xhr.responseText;
-                }
-            };
-            xhr.open("GET", file, true);
-            xhr.send();
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            loadHTML("../header", "include-container");
-        });
-    </script>
 </head>
 <body>
-    <div id="include-container"></div>
     <div>Teachable Machine Pose Model</div>
     <div><canvas id="canvas"></canvas></div>
     <div id="label-container"></div>

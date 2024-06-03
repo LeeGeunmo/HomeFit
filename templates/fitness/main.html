@@ -4,22 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>main</title>
-    <script>
-        function loadHTML(file, elementId) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    document.getElementById(elementId).innerHTML = xhr.responseText;
-                }
-            };
-            xhr.open("GET", file, true);
-            xhr.send();
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            loadHTML("../header", "include-container");
-        });
-    </script>
     <link
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
@@ -31,7 +15,6 @@
 
     <!-- base.html -->
     {% block content %}
-    <div id="include-container"></div>
     <div class="container mt-5">
       <div class="row justify-content-center">
         {% if request.user.is_authenticated %}
