@@ -144,3 +144,10 @@ nav:nth-child(4) > a, span {
     background-color: red;
     border-color: red;
 }
+
+.btn-form {
+    border: 2px solid #000000;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+}

@@ -10,14 +10,16 @@
             margin: 5px 0;
         }
         #squat-counter {
+            text-align: center;
             font-size: 24px; /* 스쿼트 카운트 글자 크기 */
             font-weight: bold;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
     {% include './header.html' %}
-    <div>Teachable Machine Pose Model</div>
+    <div style="text-align: center;">Teachable Machine Pose Model</div>
     <div><canvas id="canvas"></canvas></div>
     <div id="label-container"></div>
     <div id="squat-counter">Squat Count: 0</div>
