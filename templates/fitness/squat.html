@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teachable Machine Pose Model</title>
+    <script>
+        function loadHTML(file, elementId) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById(elementId).innerHTML = xhr.responseText;
+                }
+            };
+            xhr.open("GET", file, true);
+            xhr.send();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadHTML("../header", "include-container");
+        });
+    </script>
     <style>
         #label-container div {
             font-size: 20px; /* 예측 결과 글자 크기 */
@@ -16,6 +32,7 @@
     </style>
 </head>
 <body>
+    <div id="include-container"></div>
     <div>Teachable Machine Pose Model</div>
     <div><canvas id="canvas"></canvas></div>
     <div id="label-container"></div>
@@ -71,6 +88,17 @@
             drawPose(pose);
         }
 
+        {% comment %} function handleSquatCounting(prediction) {
+            const squatProbability = prediction[0].probability;
+
+            if (squatProbability > 0.9 && !inSquat) {
+                inSquat = true;
+                squatCount++;
+                document.getElementById("squat-counter").innerHTML = "Squat Count: " + squatCount;
+            } else if (squatProbability < 0.5 && inSquat) {
+                inSquat = false;
+            }
+        } {% endcomment %}
         function handleSquatCounting(prediction) {
             const squatProbability = prediction[0].probability;
 
@@ -79,14 +107,14 @@
                 squatStartTime = Date.now();
             } else if (squatProbability > 0.9 && inSquat) {
                 const squatDuration = Date.now() - squatStartTime;
-                if (squatDuration >= 1000) {
+                if (squatDuration >= 1000) { // 1초 동안 스쿼트 상태 유지
                     squatCount++;
                     document.getElementById("squat-counter").innerHTML = "Squat Count: " + squatCount;
-                    document.getElementById("beep-sound").play(); 
-                    inSquat = false;
+                    document.getElementById("beep-sound").play(); // 알림음 재생
+                    inSquat = false; // 카운트 후 초기화
                 }
             } else if (squatProbability < 0.5 && inSquat) {
-                inSquat = false;
+                inSquat = false; // 스쿼트 상태가 아니면 초기화
             }
         }
 

@@ -6,6 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>운동 통계분석</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        function loadHTML(file, elementId) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById(elementId).innerHTML = xhr.responseText;
+                }
+            };
+            xhr.open("GET", file, true);
+            xhr.send();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadHTML("../header", "include-container");
+        });
+    </script>
     <style>
         .progress-bar-container {
             display: flex;
@@ -31,7 +47,8 @@
 </head>
 
 <body>
-    <div class="container">
+    <div id="include-container"></div>
+    <div class="container mt-5">
         <h2 class="text-center mb-4">일주일간 운동 현황</h2>
         <div class="progress-bar-container">
             <div class="progress-bar-box"></div>
@@ -54,7 +71,9 @@
         <div class="survey-question">
             <h4 class="text-center mb-4"><b class="highlight">O</b>정자세가 비율이 <b class="highlight">O</b>%입니다.</h4>
         </div>
-        <button class="btn btn-primary">확인</button>
+        <div class="text-center">
+            <button class="btn btn-dark et-bar-right">확인</button>
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

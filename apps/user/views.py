@@ -98,4 +98,6 @@ def additional_activity_level(request):
 
 def mypage(request):
     return render(request, 'user/mypage.html')
-        
+
+def header(request):
+    return render(request, 'user/header.html')

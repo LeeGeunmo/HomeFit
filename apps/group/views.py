@@ -88,3 +88,5 @@ def kick_group(request) :
     group.members.remove(user)
     return redirect('group:main')
 
+def header(request):
+    return render(request, 'group/header.html')

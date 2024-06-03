@@ -1,15 +1,86 @@
-{% extends './base.html' %}{% load static %}
-<!-- base.html -->
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>main</title>
+    <script>
+        function loadHTML(file, elementId) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById(elementId).innerHTML = xhr.responseText;
+                }
+            };
+            xhr.open("GET", file, true);
+            xhr.send();
+        }
 
-{% block content %}
-<div class="main-container">
-    {% if request.user.is_authenticated %}
-        <a href="/fitness/selectRoutine" class="btn">운동루틴</a>
-        <a href="/fitness/stat" class="btn">운동통계분석</a>
-    {% else %}
-        <a href="/user/login" class="btn">로그인</a>
-        <a href="/user/signup" class="btn">회원가입</a>
-    {% endif %}
-</div>
+        document.addEventListener("DOMContentLoaded", function() {
+            loadHTML("../header", "include-container");
+        });
+    </script>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
 
-{% endblock %}
+  <body>
+    {% extends './base.html' %} {% load static %}
+
+    <!-- base.html -->
+    {% block content %}
+    <div id="include-container"></div>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        {% if request.user.is_authenticated %}
+        <div class="col-md-4">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">운동 루틴</h5>
+              <p class="card-text">개인 맞춤형 운동 루틴을 확인하세요.</p>
+              <a href="/fitness/selectRoutine" class="btn btn-dark">운동루틴</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mt-2">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">운동 통계 분석</h5>
+              <p class="card-text">운동 효과를 분석하고 목표를 달성하세요.</p>
+              <a href="/fitness/stat" class="btn btn-dark">운동통계분석</a>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="col-md-4">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">로그인</h5>
+              <p class="card-text">계정에 로그인하여 서비스를 이용하세요.</p>
+              <a href="/user/login" class="btn btn-primary">로그인</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title">회원가입</h5>
+              <p class="card-text">
+                새 계정을 만들고 우리의 서비스를 이용하세요.
+              </p>
+              <a href="/user/signup" class="btn btn-primary">회원가입</a>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endblock %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
