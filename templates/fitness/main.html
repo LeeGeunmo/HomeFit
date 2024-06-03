@@ -1,0 +1,15 @@
+{% extends './base.html' %}{% load static %}
+<!-- base.html -->
+
+{% block content %}
+<div class="main-container">
+    {% if request.user.is_authenticated %}
+        <a href="/fitness/selectRoutine" class="btn">운동루틴</a>
+        <a href="/fitness/stat" class="btn">운동통계분석</a>
+    {% else %}
+        <a href="/user/login" class="btn">로그인</a>
+        <a href="/user/signup" class="btn">회원가입</a>
+    {% endif %}
+</div>
+
+{% endblock %}

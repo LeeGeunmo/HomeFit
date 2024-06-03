@@ -1,0 +1,22 @@
+{% extends './base.html' %}{% load static %}
+{% block content %}
+
+<div class="logout-container">
+  <form method="POST" action="{% url 'group:add_group' %}">
+      {% csrf_token %}
+      <h1>그룹 생성</h1>
+      <div class="signup-error-messages">
+        {% for message in messages %}
+          <ul>
+            {{ message }}
+          </ul>
+        {% endfor %}
+    </div>
+      <div class="form-group">
+        <label for="group_name">그룹 명</label>
+        <input type="group_name" class="form-control" id="group_name" name="group_name" />
+      </div>
+      <button type="submit" id="addBtn">그룹 생성</button>
+  </form>
+</div>
+{% endblock %}

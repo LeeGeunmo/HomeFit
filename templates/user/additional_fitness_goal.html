@@ -1,0 +1,148 @@
+{% comment %} <!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운동 목표 입력</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .clickable-card {
+            border: 1px solid #ccc;
+            /* 경계선 */
+            padding: 20px;
+            /* 내부 여백 */
+            border-radius: 5px;
+            /* 모서리 둥글게 */
+            text-align: center;
+            /* 텍스트 중앙 정렬 */
+            cursor: pointer;
+            /* 커서 스타일 */
+            transition: background-color 0.3s;
+            /* 배경색 변경 애니메이션 */
+        }
+
+        .clickable-card:hover {
+            background-color: #f8f9fa;
+            /* 호버 시 배경색 변경 */
+        }
+
+        .title {
+            font-size: 1.5em;
+            /* 제목 글자 크기 */
+            margin-bottom: 0;
+            /* 하단 여백 없애기 */
+        }
+
+        .description {
+            font-size: 0.8em;
+            /* 설명 글자 크기 */
+            margin-top: 5px;
+            /* 상단 여백 추가 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-5">운동 목표가 어떻게 되나요?</h2>
+        <div class="row">
+            <form method="post">
+                <div class="col-md-4">
+                    <div class="clickable-card" onclick="alert('근성장 선택!')">
+                        <div class="title">근성장</div>
+                        <div class="description">근육량을 증가시키고 싶어요</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="clickable-card" onclick="alert('다이어트 선택!')">
+                        <div class="title">다이어트</div>
+                        <div class="description">체중을 감량하고 싶어요</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="clickable-card" onclick="alert('벌크업 선택!')">
+                        <div class="title">벌크업</div>
+                        <div class="description">근육을 키우기 전 몸무게를 늘리고 싶어요</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html> {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운동 목표 입력</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .clickable-card {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .clickable-card:hover {
+            background-color: #f8f9fa;
+        }
+
+        .title {
+            font-size: 1.5em;
+            margin-bottom: 0;
+        }
+
+        .description {
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-5">운동 목표가 어떻게 되나요?</h2>
+        <div class="row">
+            <form method="post" id="goalForm">
+                {% csrf_token %}
+                <input type="hidden" name="fitness_goal" id="fitnessGoalInput">
+                <div class="col-md-4">
+                    <div class="clickable-card" onclick="submitGoal('muscle_gain')">
+                        <div class="title">근성장</div>
+                        <div class="description">근육량을 증가시키고 싶어요</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="clickable-card" onclick="submitGoal('diet')">
+                        <div class="title">다이어트</div>
+                        <div class="description">체중을 감량하고 싶어요</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="clickable-card" onclick="submitGoal('bulk_up')">
+                        <div class="title">벌크업</div>
+                        <div class="description">근육을 키우기 전 몸무게를 늘리고 싶어요</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function submitGoal(goal) {
+            document.getElementById('fitnessGoalInput').value = goal;
+            document.getElementById('goalForm').submit();
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

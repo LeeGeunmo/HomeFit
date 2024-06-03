@@ -1,0 +1,9 @@
+{% extends './base.html' %}{% load static %}
+{% block content %}
+  <h1>전체 그룹</h1>
+  <ul>
+    {% for group_name in group_names %}
+      <li>{{ group_name }} <a href="/group/join_group?group_name={{group_name}}">참여</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

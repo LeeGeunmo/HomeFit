@@ -1,0 +1,108 @@
+<!DOCTYPE html>{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachable Machine Pose Model</title>
+    <style>
+        #label-container div {
+            font-size: 20px; /* 예측 결과 글자 크기 */
+            margin: 5px 0;
+        }
+        #squat-counter {
+            font-size: 24px; /* 스쿼트 카운트 글자 크기 */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div>Teachable Machine Pose Model</div>
+    <div><canvas id="canvas"></canvas></div>
+    <div id="label-container"></div>
+    <div id="squat-counter">Squat Count: 0</div>
+    <audio id="beep-sound" src="{% static 'sound/beep.mp3' %}" preload="auto"></audio>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+    <script type="text/javascript">
+        const URL = "https://teachablemachine.withgoogle.com/models/VieoHLO9N/";
+        let model, webcam, ctx, labelContainer, maxPredictions;
+        let squatCount = 0;
+        let inSquat = false;
+
+        async function init() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+
+            model = await tmPose.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+
+            const size = 200;
+            const flip = true;
+            webcam = new tmPose.Webcam(size, size, flip);
+            await webcam.setup();
+            await webcam.play();
+            window.requestAnimationFrame(loop);
+
+            const canvas = document.getElementById("canvas");
+            canvas.width = size; canvas.height = size;
+            ctx = canvas.getContext("2d");
+            labelContainer = document.getElementById("label-container");
+            for (let i = 0; i < maxPredictions; i++) {
+                labelContainer.appendChild(document.createElement("div"));
+            }
+        }
+
+        async function loop(timestamp) {
+            webcam.update();
+            await predict();
+            window.requestAnimationFrame(loop);
+        }
+
+        async function predict() {
+            const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+            const prediction = await model.predict(posenetOutput);
+
+            for (let i = 0; i < maxPredictions; i++) {
+                const classPrediction = prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+                labelContainer.childNodes[i].innerHTML = classPrediction;
+            }
+
+            handleSquatCounting(prediction);
+            drawPose(pose);
+        }
+
+        function handleSquatCounting(prediction) {
+            const squatProbability = prediction[0].probability;
+
+            if (squatProbability > 0.9 && !inSquat) {
+                inSquat = true;
+                squatStartTime = Date.now();
+            } else if (squatProbability > 0.9 && inSquat) {
+                const squatDuration = Date.now() - squatStartTime;
+                if (squatDuration >= 1000) {
+                    squatCount++;
+                    document.getElementById("squat-counter").innerHTML = "Squat Count: " + squatCount;
+                    document.getElementById("beep-sound").play(); 
+                    inSquat = false;
+                }
+            } else if (squatProbability < 0.5 && inSquat) {
+                inSquat = false;
+            }
+        }
+
+
+        function drawPose(pose) {
+            if (webcam.canvas) {
+                ctx.drawImage(webcam.canvas, 0, 0);
+                if (pose) {
+                    const minPartConfidence = 0.5;
+                    tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+                    tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+                }
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

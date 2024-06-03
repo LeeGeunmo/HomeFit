@@ -1,0 +1,9 @@
+{% extends './base.html' %}{% load static %}
+{% block content %}
+  <h1>그룹 이름 {{ group.name }}</h1>
+  <ul>
+    {% for member_name in member_names %}
+      <li>{{ member_name }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>운동 통계분석</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .progress-bar-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar-box {
+            flex: 1;
+            height: 100px;
+            background-color: #e0e0e0;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .progress-bar-box:last-child {
+            margin-right: 0;
+        }
+
+        .survey-question {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">일주일간 운동 현황</h2>
+        <div class="progress-bar-container">
+            <div class="progress-bar-box"></div>
+            <div class="progress-bar-box"></div>
+            <div class="progress-bar-box"></div>
+            <div class="progress-bar-box"></div>
+            <div class="progress-bar-box"></div>
+            <div class="progress-bar-box"></div>
+            <div class="progress-bar-box"></div>
+        </div>
+        <div class="survey-question">
+            <h4 class="text-center mb-4"><b class="highlight">O</b> 일 연속으로 운동하셨어요.</h4>
+        </div>
+        <div class="survey-question">
+            <h4 class="text-center mb-4"><b class="highlight">O</b> 스쿼트를 좋아하시네요!</h4>
+        </div>
+        <div class="survey-question">
+            <h4 class="text-center mb-4"><b class="highlight">O</b> 지난 운동에 비해 <b class="highlight">O</b>번 증가였습니다.</h4>
+        </div>
+        <div class="survey-question">
+            <h4 class="text-center mb-4"><b class="highlight">O</b>정자세가 비율이 <b class="highlight">O</b>%입니다.</h4>
+        </div>
+        <button class="btn btn-primary">확인</button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

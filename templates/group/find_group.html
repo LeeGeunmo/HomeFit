@@ -1,0 +1,15 @@
+{% extends './base.html' %}{% load static %}
+{% block content %}
+  <h1>그룹</h1>
+  <form method="get" action="{% url 'group:find_group' %}">
+    <input type="text" name="query" placeholder="Search for a group" value="{{ query|default_if_none:'' }}">
+    <button type="submit">Search</button>
+  </form>
+  <ul>
+    {% for group in groups %}
+      <li>{{ group.name }}</li>
+    {% empty %}
+      <li>No groups found.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
