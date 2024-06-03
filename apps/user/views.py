@@ -62,7 +62,7 @@ def signup(request):
         if created:
             user.backend = f'{ModelBackend.__module__}.{ModelBackend.__qualname__}'
             user.save()
-            return redirect('user:main')
+            return redirect('user:login')
         else:
             return render(request, 'user/signup.html', {'error_message': '이미 해당 아이디로 가입된 유저가 있습니다.'})
 
