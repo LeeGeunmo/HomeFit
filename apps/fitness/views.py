@@ -10,8 +10,8 @@ import random
 from django.contrib.auth.decorators import login_required
 
 
-def main(request):
-    return render(request, 'fitness/main.html')
+# def main(request):
+#     return render(request, 'fitness/main.html')
 
 def selectRoutine(request):
     exerciseCategory = ExerciseCategory.objects.exclude(name = '유산소')

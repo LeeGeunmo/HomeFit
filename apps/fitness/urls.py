@@ -4,7 +4,7 @@ from . import views
 app_name = 'fitness'
 
 urlpatterns = [
-    path('main/', views.main, name='main'),
+    # path('main/', views.main, name='main'),
     path('selectRoutine/', views.selectRoutine, name='selectRoutine'),
     path('stat/', views.stat, name='stat'),
     path('startExercise/', views.startExercise, name='startExercise'),
