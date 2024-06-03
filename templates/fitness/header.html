@@ -8,29 +8,28 @@
     <body>
         <header class="grid">
             <a href="/">HomeFit</a>
-            <nav class="dropdown">
+            <nav class="dropdown_fitness">
                 <div class="fitness">
                     <a>fitness</a>
                 </div>
-                <div class="dropdown-content" style="display: none;">
+                <div class="dropdown-content-fitness" style="display: none;">
                     <a href="{% url "fitness:selectRoutine" %}">운동루틴</a>
                     <a href="{% url "fitness:stat" %}">운동통계분석</a>
                 </div>
             </nav>
-            <nav class="dropdown">
+            <nav class="dropdown_community">
                 <div class="community">
                     <a>community</a>
                 </div>
-                <div class="dropdown-content" style="display: none;">
+                <div class="dropdown-content-community" style="display: none;">
                     <a href="{% url "community:main" %}">커뮤니티</a>
-                    <a href="{% url "group:main" %}">그룹</a>
                 </div>
             </nav>
-            <nav class="dropdown">
+            <nav class="dropdown_mypage">
                 <div class="my-page">
                     <img src="{% static "img/main/arrow-down.svg" %}">
                 </div>
-                <div class="dropdown-content" style="display: none;">
+                <div class="dropdown-content-mypage" style="display: none;">
                     {% if request.user.is_authenticated %}
                         <a>{{request.user}}님 안녕하세요!</a>
                         <hr>
@@ -44,16 +43,41 @@
             </nav>
         </header>
         <script>
-            btn = document.getElementsByClassName('my-page')[0];
-            btn.addEventListener('click', function(e) {
-                var dropdown = document.querySelector('.dropdown-content');
-                if (!e.target.classList.contains('.my-page')) {
-                    // 드롭 다운 메뉴 토글
-                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-                } else {
-                    // 다른 곳 클릭 시 메뉴 숨김
-                    dropdown.style.display = 'none';
-                }
+            btn1 = document.getElementsByClassName('dropdown_mypage')[0];
+            btn1.addEventListener('click', function(e) {
+                e.stopPropagation()
+                var dropdown = document.querySelector('.dropdown-content-mypage');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                document.querySelector('.dropdown-content-fitness').style.display = 'none';
+                document.querySelector('.dropdown-content-community').style.display = 'none';
+            });
+
+            btn2 = document.getElementsByClassName('dropdown_fitness')[0];
+            btn2.addEventListener('click', function(e) {
+                e.stopPropagation()
+                var dropdown = document.querySelector('.dropdown-content-fitness');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                document.querySelector('.dropdown-content-community').style.display = 'none';
+                document.querySelector('.dropdown-content-mypage').style.display = 'none';
+            });
+
+            btn3 = document.getElementsByClassName('dropdown_community')[0];
+            btn3.addEventListener('click', function(e) {
+                e.stopPropagation()
+                var dropdown = document.querySelector('.dropdown-content-community');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                document.querySelector('.dropdown-content-fitness').style.display = 'none';
+                document.querySelector('.dropdown-content-mypage').style.display = 'none';
+            });
+
+            document.addEventListener('click', function(e) {
+                e.stopPropagation()
+                var dropdown1 = document.querySelector('.dropdown-content-fitness');
+                var dropdown2 = document.querySelector('.dropdown-content-community');
+                var dropdown3 = document.querySelector('.dropdown-content-mypage');
+                dropdown1.style.display = 'none';
+                dropdown2.style.display = 'none';
+                dropdown3.style.display = 'none';
             });
         </script>
     </body>
