@@ -1,31 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script>
-        function loadHTML(file, elementId) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    document.getElementById(elementId).innerHTML = xhr.responseText;
-                }
-            };
-            xhr.open("GET", file, true);
-            xhr.send();
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            loadHTML("../header", "include-container");
-        });
-    </script>
 </head>
 
 <body>
-    <div id="include-container"></div>
     <header include-html="header/index.html"></header>
     <div class="container mt-3">
         <div class="mb-4">

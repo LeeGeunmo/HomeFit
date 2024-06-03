@@ -6,22 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Process Steps</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script>
-        function loadHTML(file, elementId) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    document.getElementById(elementId).innerHTML = xhr.responseText;
-                }
-            };
-            xhr.open("GET", file, true);
-            xhr.send();
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            loadHTML("../header", "include-container");
-        });
-    </script>
     <style>
         .step-card {
             background-color: #f8f9fa;
@@ -42,7 +26,6 @@
 </head>
 
 <body>
-    <div id="include-container"></div>
     <div class="container py-5">
         <h2 class="text-center mb-4">{{request.user}} 님을 위한 운동루틴</h2>
         {% for exercise in exercises %}
