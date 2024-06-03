@@ -87,6 +87,3 @@ def kick_group(request) :
     user = get_object_or_404(User, username=user_name)
     group.members.remove(user)
     return redirect('group:main')
-
-def header(request):
-    return render(request, 'group/header.html')

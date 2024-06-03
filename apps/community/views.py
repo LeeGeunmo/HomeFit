@@ -9,6 +9,3 @@ def main(request):
         'group' : group,
     }
     return render(request, 'community/main.html')
-
-def header(request):
-    return render(request, 'community/header.html')

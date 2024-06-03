@@ -26,6 +26,7 @@
 </head>
 
 <body>
+    {% include './header.html' %}
     <div class="container py-5">
         <h2 class="text-center mb-4">{{request.user}} 님을 위한 운동루틴</h2>
         {% for exercise in exercises %}

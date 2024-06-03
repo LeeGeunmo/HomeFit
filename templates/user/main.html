@@ -6,57 +6,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}"></link>
     </head>
     <body>
-        <header class="grid">
-            <a href="/">HomeFit</a>
-            <nav class="dropdown">
-                <div class="fitness">
-                    <a>fitness</a>
-                </div>
-                <div class="dropdown-content" style="display: none;">
-                    <a href="{% url "fitness:selectRoutine" %}">운동루틴</a>
-                    <a href="{% url "fitness:stat" %}">운동통계분석</a>
-                </div>
-            </nav>
-            <nav class="dropdown">
-                <div class="community">
-                    <a>community</a>
-                </div>
-                <div class="dropdown-content" style="display: none;">
-                    <a href="{% url "community:main" %}">커뮤니티</a>
-                    <a href="{% url "group:main" %}">그룹</a>
-                </div>
-            </nav>
-            <nav class="dropdown">
-                <div class="my-page">
-                    <img src="{% static 'img/main/profile.png' %}" alt="">
-                    <img src="{% static "img/main/arrow-down.svg" %}">
-                </div>
-                <div class="dropdown-content" style="display: none;">
-                    {% if request.user.is_authenticated %}
-                        <a>{{request.user}}님 안녕하세요!</a>
-                        <hr>
-                        <a href="{% url "user:mypage" %}">MyPage</a>
-                        <a href="{% url "user:logout" %}">Logout</a>
-                    {% else %}
-                        <a href="{% url "user:signup" %}">Signup</a>
-                        <a href="{% url "user:login" %}">Login</a>
-                    {% endif %}
-                </div>
-            </nav>
-        </header>
-        <script>
-            btn = document.getElementsByClassName('my-page')[0];
-            btn.addEventListener('click', function(e) {
-                var dropdown = document.querySelector('.dropdown-content');
-                if (!e.target.classList.contains('.my-page')) {
-                    // 드롭 다운 메뉴 토글
-                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-                } else {
-                    // 다른 곳 클릭 시 메뉴 숨김
-                    dropdown.style.display = 'none';
-                }
-            });
-        </script>
+        {% include './header.html' %}
     </body>
 
 </html>
