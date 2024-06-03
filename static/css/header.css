@@ -139,3 +139,8 @@ nav:nth-child(4) > a, span {
     display: flex;
     justify-content: space-around;
 }
+
+.button-style > :nth-child(2) {
+    background-color: red;
+    border-color: red;
+}

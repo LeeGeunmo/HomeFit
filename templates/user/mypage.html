@@ -12,22 +12,25 @@
     {% include './header.html' %}
     <!--<header include-html="header/index.html"></header>-->
     <div class="container mt-3">
-        <div class="mb-4">
+        <div class="mb-4 mt-5">
             <h3>개인 정보 변경</h3>
         </div>
         <form>
             <div class="mb-3">
                 <label for="username" class="form-label">이름</label>
-                <input type="text" class="form-control" id="username" value="@username123">
+                <input type="text" class="form-control" id="username" placeholder="name" value="@username123">
             </div>
             <div class="mb-3">
-                <label for="bio" class="form-label">Bio</label>
-                <textarea class="form-control" id="bio"
-                    rows="3">I am a designer based in Philadelphia, making great software at Figma.</textarea>
+                <label for="username" class="form-label">키</label>
+                <input type="text" class="form-control" id="height" placeholder="cm" value="256" >
+            </div>
+            <div class="mb-5">
+                <label for="username" class="form-label">몸무게</label>
+                <input type="text" class="form-control" id="weight" placeholder="kg" value="128">
             </div>
             <div class="button-style">
                 <button type="submit" class="btn btn-dark">변경 저장</button>
-                <button style="background-color: red; border-color: red;" type="submit" class="btn btn-dark">회원 탈퇴</button>
+                <button type="submit" class="btn btn-dark">회원 탈퇴</button>
             </div>
         </form>
     </div>
