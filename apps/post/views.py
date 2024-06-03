@@ -53,8 +53,3 @@ def post_list(request):
     #게시글 리스트 가져오기
     posts=Post.objects.all()
     return render(request, 'community/main.html')
-
-def header(request):
-    return render(request, 'community/header.html')
-
-

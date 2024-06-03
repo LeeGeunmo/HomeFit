@@ -5,7 +5,6 @@ app_name = 'fitness'
 
 urlpatterns = [
     path('main/', views.main, name='main'),
-    path('header/', views.header, name='header'),
     path('selectRoutine/', views.selectRoutine, name='selectRoutine'),
     path('stat/', views.stat, name='stat'),
     path('startExercise/', views.startExercise, name='startExercise'),
