@@ -1,148 +1,127 @@
 <!DOCTYPE html>
 <html lang="ko">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Community Page</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script>
-        function loadHTML(file, elementId) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    document.getElementById(elementId).innerHTML = xhr.responseText;
-                }
-            };
-            xhr.open("GET", file, true);
-            xhr.send();
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            loadHTML("../header", "include-container");
-        });
-    </script>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <style>
-        .member-div {
-            width: 150px;
-            text-align: center;
-        }
+      .member-div {
+        width: 150px;
+        text-align: center;
+      }
 
-        .member {
-            margin-left: 42px;
-            margin-bottom: 5px;
-            background-color: #c2c2c2;
-            color: #000000;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+      .member {
+        margin-left: 42px;
+        margin-bottom: 5px;
+        background-color: #c2c2c2;
+        color: #000000;
+        cursor: pointer;
+        border-radius: 5px;
+      }
 
-        .profile-img {
-            margin: 20px 0px;
-        }
+      .profile-img {
+        margin: 20px 0px;
+      }
 
-        .exercise-group {
-            margin-top: 20px;
-            width: 200px;
-        }
+      .exercise-group {
+        margin-top: 20px;
+        width: 200px;
+      }
 
-        .member:hover {
-            text-decoration: none;
-            color: #000000;
-        }
+      .member:hover {
+        text-decoration: none;
+        color: #000000;
+      }
 
-        .comment-div {
-            display: flex;
-            margin-top: 30px;
-        }
+      .comment-div {
+        display: flex;
+        margin-top: 30px;
+      }
 
-        .textarea-div {
-            margin:20px;
-        }
+      .textarea-div {
+        margin: 20px;
+      }
 
-        h1 {
-            font-weight: bolder;
-        }
+      h1 {
+        font-weight: bolder;
+      }
 
-        .border {
-            border: 1px solid black;
-            border-radius: 10px;
-        }
+      .border {
+        border: 1px solid black;
+        border-radius: 10px;
+      }
 
-        .profile {
-            width: 200px;
-            background-color: #ffffff;
-        }
+      .profile {
+        width: 200px;
+        background-color: #ffffff;
+      }
 
-        .submit {
-            width: 80px;
-            height: 80px;
-            border-radius: 10px;
-            margin-top:20px;
-            margin-right:20px;
-        }
+      .submit {
+        width: 80px;
+        height: 80px;
+        border-radius: 10px;
+        margin-top: 20px;
+        margin-right: 20px;
+      }
 
-        .mypage-btn {
-            margin-bottom: 20px;
-        }
+      .mypage-btn {
+        margin-bottom: 20px;
+      }
 
-        .content-box {
-            margin: 26px 10px;
-            background-color: #f8f9fa;
-            border: 1px solid #c2c2c2;
-            border-radius: 4px;
-            padding: 20px;
-            height: 150px;
-            margin-bottom: 20px;
-        }
+      .content-box {
+        margin: 26px 10px;
+        background-color: #f8f9fa;
+        border: 1px solid #c2c2c2;
+        border-radius: 4px;
+        padding: 20px;
+        height: 150px;
+        margin-bottom: 20px;
+      }
 
-        .footer-area {
-            margin-top: 20px;
-        }
+      .footer-area {
+        margin-top: 20px;
+      }
 
-        .sidebar {
-            position: -webkit-sticky;
-            position: sticky;
-            top: 20px;
-        }
+      .sidebar {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 20px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-    <div id="include-container"></div>
+  <body>
     <div class="container">
-        <h1 class="mt-4 mb-5 text-center">Community</h1>
-        <div class="row">
-            <div class="col-md-8">
-                <div class="border">
-                    <div class="content-box"></div>
-                    <div class="content-box"></div>
-                </div>
-                <div class="comment-div border">
-                    <textarea class="form-control textarea-div" rows="3"></textarea>
-                    <button type="button" class="btn btn-secondary submit">게시</button>
-                </div>
-            </div>
-            <div class="col-md-4 sidebar">
-                <div class="profile border text-center">
-                    <img class="profile-img" width=100px height=100px src="./gicap/zany_face.png" alt="">
-                    <button type="button" class="btn btn-secondary mypage-btn">마이페이지</button>
-                </div>
-                <div class="border text-center exercise-group">
-                    <p>운동 그룹 (멤버)</p>
-                    <div class="list-group list-group-flush member-div">
-                        <a class="member">멤버1</a>
-                        <a class="member">멤버2</a>
-                        <a class="member">멤버3</a>
-                    </div>
-                </div>
-                
-            </div>
+      <h1 class="mt-4 mb-5 text-center">Community</h1>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="border">
+            <div class="content-box"></div>
+            <div class="content-box"></div>
+          </div>
+          <div class="comment-div border">
+            <textarea class="form-control textarea-div" rows="3"></textarea>
+            <button type="button" class="btn btn-secondary submit">게시</button>
+          </div>
         </div>
+        <div class="col-md-4 sidebar">
+          <div class="border text-center exercise-group">
+            <p>운동 그룹 (멤버)</p>
+            <div class="list-group list-group-flush member-div">
+              <a class="member">멤버1</a>
+              <a class="member">멤버2</a>
+              <a class="member">멤버3</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-
+  </body>
 </html>
