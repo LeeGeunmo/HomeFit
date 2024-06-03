@@ -52,11 +52,13 @@
                     <button type="button" class="btn btn-secondary">횟수</button>
                 </div>
                 {% if next_exercise %}
-                    <form method="get" action="{% url 'fitness:doExercise_with_id' category_id=category_id exercise_id=next_exercise.id %}">
-                        <button type="submit">Next Exercise</button>
+                    <form style="margin-top: 30px; text-align: center;" method="get" action="{% url 'fitness:doExercise_with_id' category_id=category_id exercise_id=next_exercise.id %}">
+                        <button type="submit" class="btn-form" style="width:150px;height:50px;">Next Exercise</button>
                     </form>
                 {% else %}
-                    <a href="{%url 'fitness:dailyStatistics' %}" class="btn">운동 끝내기</a>
+                    <div style="text-align: center; margin-top: 40px;">
+                        <a href="{%url 'fitness:dailyStatistics' %}" class="btn btn-form">운동 끝내기</a>
+                    </div>
         
                 {% endif %}
             </div>
