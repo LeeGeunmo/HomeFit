@@ -5,11 +5,13 @@ from django.urls import reverse
 from .models import User
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.backends import ModelBackend
+from apps.fitness.models import ExerciseCategory
 
 User = get_user_model()
 # Create your views here.
 def main(request):
-    return render(request, 'user/main.html')
+    exerciseCategory = ExerciseCategory.objects.exclude(name = '유산소')
+    return render(request, 'fitness/selectRoutine.html',{'categories': exerciseCategory})
 
 def login(request):
     if request.method == 'POST':
