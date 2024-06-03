@@ -8,7 +8,7 @@ body {
 }
 
 a {
-    color: #ffffff;
+    color: #000000;
     text-decoration-line: none;
 } 
 
@@ -97,24 +97,33 @@ nav:nth-child(4) > a, span {
     height:16px;
 }
 
-.dropdown-content {
+.dropdown-content-fitness, .dropdown-content-community, .dropdown-content-mypage {
     display: none;
     position: absolute;
+    right:30%;
     background-color: #f9f9f9;
     border-radius: 10px;
-    min-width: 160px;
+    min-width: 150px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
 
-.dropdown-content > a {
+.dropdown-content-community {
+    right:10%;
+}
+
+.dropdown-content-mypage {
+    right:0%;
+}
+
+.dropdown-content-fitness > a, .dropdown-content-community > a, .dropdown-content-mypage > a {
     color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
 }
 
-.dropdown-content > a:hover {
+.dropdown-content-fitness > a:hover, .dropdown-content-community > a:hover, .dropdown-content-mypage > a:hover {
     color: black;
     background-color: #e3e3e3;
     padding: 12px 16px;
