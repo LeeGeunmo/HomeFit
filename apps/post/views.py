@@ -7,22 +7,27 @@ from django.utils import timezone
 
 
 def main(request):
-    return render(request,'community/main.html')
+    posts=Post.objects.all()
+    print(posts)
+    return render(request, 'community/main.html', {"posts": posts})
+
 def create_post(request) :
   
     if request.method=='POST':
-        title=request.POST.get('title')
         content=request.POST.get('content')
 
         #게시글 생성
         new_post=Post.objects.create(
-            title=title,
+            user=request.user,
             content=content,
             created_time=timezone.now(),
-            updated_time=timezone.now(),
         )
-        return redirect('post_list')
-    return render(request,'community/main.html')
+        new_post.save()
+        posts = Post.objects.all()
+        return redirect('community:main',{"posts": posts})
+    posts = Post.objects.all()
+    return render(request,'community/main.html',{"posts": posts})
+
 def edit_post(request, post_id) :
     post=get_object_or_404(Post,pk=post_id)
 
@@ -36,20 +41,22 @@ def edit_post(request, post_id) :
         post.content=content
         post.updated_time=timezone.now()
         post.save()
-
-        return redirect('post_list', post_id=post.id)
-    return render(request, 'community/main.html')
+        posts = Post.objects.all()
+        return redirect('community:main',{"posts": posts})
+    posts = Post.objects.all()
+    return render(request, 'community/main.html',{"posts": posts})
 
 def delete_post(request,post_id) :
     post=get_object_or_404(Post, pk=post_id)
 
     if request.method=='POST':
         post.delete()
-
-        return redirect('post_list')
-    return render(request,'community/main.html')
+        posts = Post.objects.all()
+        return redirect('community:main',{"posts": posts})
+    posts = Post.objects.all()
+    return render(request,'community/main.html',{"posts": posts})
 
 def post_list(request):
     #게시글 리스트 가져오기
     posts=Post.objects.all()
-    return render(request, 'community/main.html')
+    return render(request, 'community/main.html', {"posts": posts})

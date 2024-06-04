@@ -19,7 +19,6 @@
 </head>
 <body>
     {% include './header.html' %}
-    <div style="text-align: center;">Teachable Machine Pose Model</div>
     <div><canvas id="canvas"></canvas></div>
     <div id="label-container"></div>
     <div id="squat-counter">Squat Count: 0</div>
@@ -31,6 +30,7 @@
         let model, webcam, ctx, labelContainer, maxPredictions;
         let squatCount = 0;
         let inSquat = false;
+        let doneSquat = false;
 
         async function init() {
             const modelURL = URL + "model.json";
@@ -39,7 +39,7 @@
             model = await tmPose.load(modelURL, metadataURL);
             maxPredictions = model.getTotalClasses();
 
-            const size = 200;
+            const size = 370;
             const flip = true;
             webcam = new tmPose.Webcam(size, size, flip);
             await webcam.setup();
@@ -65,45 +65,31 @@
             const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
             const prediction = await model.predict(posenetOutput);
 
-            for (let i = 0; i < maxPredictions; i++) {
+            {% comment %} for (let i = 0; i < maxPredictions; i++) {
                 const classPrediction = prediction[i].className + ": " + prediction[i].probability.toFixed(2);
                 labelContainer.childNodes[i].innerHTML = classPrediction;
-            }
+            } {% endcomment %}
 
             handleSquatCounting(prediction);
             drawPose(pose);
         }
 
-        {% comment %} function handleSquatCounting(prediction) {
-            const squatProbability = prediction[0].probability;
-
-            if (squatProbability > 0.9 && !inSquat) {
-                inSquat = true;
-                squatCount++;
-                document.getElementById("squat-counter").innerHTML = "Squat Count: " + squatCount;
-            } else if (squatProbability < 0.5 && inSquat) {
-                inSquat = false;
-            }
-        } {% endcomment %}
         function handleSquatCounting(prediction) {
             const squatProbability = prediction[0].probability;
+            const standProbability = prediction[1].probability;
 
             if (squatProbability > 0.9 && !inSquat) {
                 inSquat = true;
-                squatStartTime = Date.now();
             } else if (squatProbability > 0.9 && inSquat) {
-                const squatDuration = Date.now() - squatStartTime;
-                if (squatDuration >= 1000) { // 1초 동안 스쿼트 상태 유지
-                    squatCount++;
-                    document.getElementById("squat-counter").innerHTML = "Squat Count: " + squatCount;
-                    document.getElementById("beep-sound").play(); // 알림음 재생
-                    inSquat = false; // 카운트 후 초기화
-                }
-            } else if (squatProbability < 0.5 && inSquat) {
-                inSquat = false; // 스쿼트 상태가 아니면 초기화
+                document.getElementById("beep-sound").play();
+                doneSquat = true;
+            } else if (standProbability > 0.9 && doneSquat){
+                squatCount++;
+                document.getElementById("squat-counter").innerHTML = "Squat Count: " + squatCount;
+                document.getElementById("beep-sound").play(); // 알림음 재생
+                inSquat, doneSquat = false; // 카운트 후 초기화
             }
         }
-
 
         function drawPose(pose) {
             if (webcam.canvas) {

@@ -101,13 +101,17 @@
       <div class="row">
         <div class="col-md-8">
           <div class="border">
-            <div class="content-box"></div>
-            <div class="content-box"></div>
+            {% for post in posts %}
+              <div class="content-box">{{post.content}}</div>
+            {% endfor %}
           </div>
-          <div class="comment-div border">
-            <textarea class="form-control textarea-div" rows="3"></textarea>
-            <button type="button" class="btn btn-secondary submit">게시</button>
-          </div>
+          <form method="POST" action="{% url 'post:create_post' %}">
+            {% csrf_token %}
+            <div class="comment-div border">
+              <textarea class="form-control textarea-div" rows="3" name="content"></textarea>
+              <button type="submit" class="btn btn-secondary submit">게시</button>
+            </div>
+          </form>
         </div>
         <div class="col-md-4 sidebar">
           <div class="border text-center exercise-group">

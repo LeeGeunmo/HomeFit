@@ -6,6 +6,7 @@ from .models import User
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.backends import ModelBackend
 from apps.fitness.models import ExerciseCategory
+from django.contrib.auth.decorators import login_required
 
 User = get_user_model()
 # Create your views here.
@@ -98,5 +99,34 @@ def additional_activity_level(request):
 
     return render(request, 'user/additional_activity_level.html')
 
+@login_required
 def mypage(request):
-    return render(request, 'user/mypage.html')
+    if request.method == 'POST':
+        # 여기서 폼 데이터를 처리하여 사용자 프로필을 업데이트합니다.
+        user = request.user
+        user.height = request.POST.get('height')
+        user.weight = request.POST.get('weight')
+        print(user, user.height, user.weight)
+        user.save()
+        return redirect('user:mypage')  # 변경 후 프로필 페이지로 리디렉션
+
+    # GET 요청인 경우 사용자 데이터를 템플릿으로 전달
+    return render(request, 'user/mypage.html', {
+        'user': request.user
+    })
+
+# @login_required
+# def edit_profile(request):
+#     if request.method == 'POST':
+#         # 여기서 폼 데이터를 처리하여 사용자 프로필을 업데이트합니다.
+#         user = request.user
+#         user.username = request.POST.get('username')
+#         user.height = request.POST.get('height')
+#         user.weight = request.POST.get('weight')
+#         user.save()
+#         return redirect('mypage')  # 변경 후 프로필 페이지로 리디렉션
+
+#     # GET 요청인 경우 사용자 데이터를 템플릿으로 전달
+#     return render(request, 'user/mypage.html', {
+#         'user': request.user
+#     })
