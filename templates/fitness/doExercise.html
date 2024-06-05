@@ -43,11 +43,15 @@
 
 <body>
     {% include './header.html' %}
-    
     <audio id="prepare-sound" src="{% static 'sound/prepareExer.mp3' %}" preload="auto"></audio>
     <audio id="beep-sound" src="{% static 'sound/beep.mp3' %}" preload="auto"></audio>
     <audio id="break" src="{% static 'sound/break.mp3' %}" preload="auto"></audio>
     <audio id="seconds5" src="{% static 'sound/5seconds.mp3' %}" preload="auto"></audio>
+    <audio id="nextExer-sound" src="{% static 'sound/goNextExer.mp3' %}" preload="auto"></audio>
+    <audio id="endExer-sound" src="{% static 'sound/endExer.mp3' %}" preload="auto"></audio>
+    <script>
+        
+    </script>
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3 mt-5">
@@ -72,8 +76,7 @@
                     <button type="button" class="btn btn-secondary" id="set">세트</button>
                     <button type="button" class="btn btn-secondary" id="repet">회</button>
                     <script>
-                        document.getElementById("set").innerHTML = set + "세트";
-                        document.getElementById("repet").innerHTML = repet + "회";
+                        
                     </script>
                 </div>
                 
@@ -91,18 +94,35 @@
     </div>
 
     <script>
-        async function startSet() {
-            let repet = {{ exercise.repetition_count }};
-            for (let i = 0; i < repet; i++) {
+        let setNum = 0;
+        let repetNum = 0;
+
+        async function startSet(check) {
+            let repet_num_db = {{ exercise.repetition_count }};
+            for (let i = 0; i < repet_num_db; i++) {
+                document.getElementById("repet").innerHTML = ++repetNum + "회";
                 document.getElementById("beep-sound").play();
                 await sleep(4000);
             }
-            let aud_break = document.getElementById("break");
-            aud_break.play();
-            aud_break.onended = async function() {
-                await sleep(2000);
-                document.getElementById("seconds5").play();
-            };
+            if (check !== 2){
+                let aud_break = document.getElementById("break");
+                aud_break.play();
+                return new Promise(resolve => {
+                    aud_break.onended = async function() {
+                    await sleep(15000);
+                    aud_seconds5 = document.getElementById("seconds5")
+                    aud_seconds5.play();
+                    aud_seconds5.onended = async function(){
+                        resolve();
+                    }
+                    };
+                });
+            }
+            else{
+                let aud_next_exer = document.getElementById("nextExer-sound");
+                aud_next_exer.play();
+            }
+            
         }
 
         function sleep(ms) {
@@ -110,17 +130,23 @@
         }
 
         function startExer() {
+            
+            let set_num_db = {{exercise.set_number}};
             var aud = document.getElementById("prepare-sound");
             aud.play();
-            aud.onended = function() {
-                let set = {{ exercise.set_number }};
-                for (let i = 0; i < set; i++) {
-                    startSet();
+            aud.onended = async function() {
+                for (let i = 0; i < set_num_db; i++) {
+                    repetNum = 0;
+                    document.getElementById("set").innerHTML = ++setNum + "세트";
+                    console.log(i +"번째 반복")
+                    await startSet(i);
                 }
             };
         }
 
         document.getElementById('start_exercise').addEventListener('click', startExer);
+        document.getElementById("set").innerHTML = setNum + "세트";
+        document.getElementById("repet").innerHTML = repetNum + "회";
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
