@@ -2,6 +2,7 @@
     box-sizing: border-box;
 }
 
+
 body {
     padding-top: 75px;
     background: #ffffff;
@@ -138,16 +139,22 @@ nav:nth-child(4) > a, span {
 .button-style {
     display: flex;
     justify-content: space-around;
+    margin-bottom: 20px;
 }
 
-.button-style > :nth-child(2) {
+.button-style:nth-child(2) {
     background-color: red;
     border-color: red;
-}
+} 
 
 .btn-form {
     border: 2px solid #000000;
     background-color: black;
     color: white;
     border-radius: 5px;
+}
+
+.btn-form:hover {
+    color: white;
+    opacity: 70%;
 }

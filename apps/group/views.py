@@ -19,13 +19,14 @@ def main(request):
     return render(request, 'group/main.html', context)
 
 def add_group(request):
-    if request.method == 'POST' :
-        group_name = request.POST['group_name']
-        g = Group(name=group_name)
-        g.save()
-        g.members.add(request.user)
-        return redirect('group:main')
-    return render(request, 'group/add_group.html')
+    #if request.method == 'POST' :
+    print('1212121212')
+    group_name = request.POST['group_name']
+    g = Group(name=group_name)
+    g.save()
+    g.members.add(request.user)
+    return redirect('group:main')
+    #return render(request, 'group/add_group.html')
 
 
 def del_group(request) :
@@ -40,7 +41,6 @@ def join_group(request):
     group = get_object_or_404(Group, name=group_name)
     group.members.add(request.user)
     return redirect('group:main')
-
 
 def leave_group(request):
     group_name = request.GET.get('group_name')
@@ -87,3 +87,30 @@ def kick_group(request) :
     user = get_object_or_404(User, username=user_name)
     group.members.remove(user)
     return redirect('group:main')
+
+def check_group(request):
+    group_name = request.POST.get('group_name')
+    groups = Group.objects.filter(name__icontains=group_name)
+    if(not groups):
+        g = Group(name=group_name)
+        g.save()
+        g.members.add(request.user)
+        return redirect('community:main')
+    else:
+        #group = [group.name for group in groups][0]
+        group = get_object_or_404(Group, name=group_name)
+        group.members.add(request.user)
+        return redirect('community:main')
+
+def check_group_member(request):
+    group_name = request.POST.get('group_name')
+    group = get_object_or_404(Group, name=group_name)
+    members = group.members.all()
+    member_names = [member.username for member in members]
+    if(len(member_names) == 1):
+        if group.members.filter(id=request.user.id).exists():
+            group.delete()
+        return redirect('community:main')
+    else:
+        group.members.remove(request.user)
+        return redirect('community:main')

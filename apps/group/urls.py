@@ -13,4 +13,6 @@ urlpatterns = [
     path('list_group/',views.list_group, name='list_group'),
     path('find_group/',views.find_group, name='find_group'),
     path('kick_group/',views.kick_group, name='kick_group'),
+    path('check_group/',views.check_group, name='check_group'),
+    path('check_group_member/',views.check_group_member, name='check_group_member'),
 ]

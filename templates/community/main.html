@@ -9,13 +9,19 @@
       rel="stylesheet"
     />
     <style>
+      .context {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      
       .member-div {
-        width: 150px;
-        text-align: center;
+        height: 100%;
       }
 
       .member {
-        margin-left: 42px;
+        margin:0px 50px;
         margin-bottom: 5px;
         background-color: #c2c2c2;
         color: #000000;
@@ -29,7 +35,7 @@
 
       .exercise-group {
         margin-top: 20px;
-        width: 200px;
+        width: 350px;
       }
 
       .member:hover {
@@ -53,11 +59,6 @@
       .border {
         border: 1px solid black;
         border-radius: 10px;
-      }
-
-      .profile {
-        width: 200px;
-        background-color: #ffffff;
       }
 
       .submit {
@@ -98,8 +99,8 @@
     {% include './header.html' %}
     <div class="container">
       <h1 class="mt-4 mb-5 text-center">Community</h1>
-      <div class="row">
-        <div class="col-md-8">
+      <div class="context">
+        <div class="col-md-8 ">
           <div class="border">
             {% for post in posts %}
               <div class="content-box">{{post.content}}</div>
@@ -113,13 +114,38 @@
             </div>
           </form>
         </div>
-        <div class="col-md-4 sidebar">
+        <div class="">
           <div class="border text-center exercise-group">
-            <p>운동 그룹 (멤버)</p>
+            <div style="font-size: 20px; padding-top:10px; font-weight: bolder;">
+              {% if groups %}
+                {% for group in groups %}
+                  {{ group.name }}
+                {% endfor %}
+              {% else %}
+                <div>그룹 추가하기</div>
+              {% endif %}
+            </div>
+            <hr />
             <div class="list-group list-group-flush member-div">
-              <a class="member">멤버1</a>
-              <a class="member">멤버2</a>
-              <a class="member">멤버3</a>
+              {% for group in groups %}
+                <div class="member">{{group.member_names}}</div>
+              {% endfor %}
+            </div>
+            <hr />
+            <div class="button-style">
+              {% if not group.group_name %}
+                <form method="POST" action="{% url 'group:check_group' %}" style="display: flex; justify-content: center; align-items: center;">
+                  {% csrf_token %}
+                  <input style="margin: 5px 0px;height:35px; border-radius: 5px;" name="group_name" type="text" placeholder="group name">
+                  <input type="submit" class="btn btn-form" style="width:100px;height:35px;margin:5px" value="그룹 추가" />
+                </form>
+              {% else %}
+                <form method="POST" action="{% url 'group:check_group_member' %}" style="display: flex; justify-content: center; align-items: center;">
+                  {% csrf_token %}
+                  <input type="hidden" name="group_name" value="{{ group_name }}">
+                  <button type="submit" style="background-color: red; border-color: red;" class="btn btn-form">그룹 나가기</button>
+                </form>
+              {% endif %}
             </div>
           </div>
         </div>
