@@ -103,8 +103,9 @@
         <div class="col-md-8">
 
           <div class="border">
-            {% for post in posts %}
+              {% for post in posts %}
               <div class="content-box">
+                <p>작성자: {{ post.user }}</p> 
                 {{post.content}}
                 <div class="post-options">
                   <form method="POST" action="{% url 'post:edit_post' post.id %}">

@@ -33,8 +33,8 @@ def edit_post(request, post_id) :
         if content:
             post.content = content
             post.save()
-        
-    return render(request, 'community/main.html', {"post": post})
+            return redirect('community:main')
+    return render(request, 'community/edit.html', {"post": post})
 
 def delete_post(request,post_id) :
     post=get_object_or_404(Post, pk=post_id)
