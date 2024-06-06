@@ -38,6 +38,9 @@
             margin-bottom: 10px;
             size: 10%;
         }
+        #end-button {
+            display : none;
+        }
     </style>
 </head>
 
@@ -49,107 +52,182 @@
     <audio id="seconds5" src="{% static 'sound/5seconds.mp3' %}" preload="auto"></audio>
     <audio id="nextExer-sound" src="{% static 'sound/goNextExer.mp3' %}" preload="auto"></audio>
     <audio id="endExer-sound" src="{% static 'sound/endExer.mp3' %}" preload="auto"></audio>
-    <script>
-        
-    </script>
     <div class="container">
         <div class="row">
-            <div class="col-md-6 offset-md-3 mt-5">
-                {% if exercise.name == "스쿼트" %}
-                    {% include 'fitness/squat.html' %}
-                {% else %}
-                    <h2 class="text-center mb-4">{{ exercise.name }}</h2>
-                    <div class="row"> <!-- 추가된 row 클래스 -->
-                        <div class="col-md-6 image-box"> <!-- 각 content-box를 col-md-6 클래스로 감싸기 -->
-                            <p>사진</p>
+            {% for exercise in exercises %}
+                <div class="col-md-6 offset-md-3 mt-5 exercise-item" id="exercise-{{ forloop.counter }}" data-set-number="{{ exercise.set_number }}" data-repetition-count="{{ exercise.repetition_count }}" data-exercise-name="{{exercise.name}}" data-exercise-duration="{{exercise.duration}}">
+                    {% if exercise.name == "스쿼트" %}
+                        {% include 'fitness/squat.html' %}
+                    {% else %}
+                        <h2 class="text-center mb-4">{{ exercise.name }}</h2>
+                        <div class="row">
+                            <div class="col-md-6 content-box">
+                                <p style="font-size: 10">{{ exercise.description }}<br><br>
+                                    {% if exercise.name == "플랭크" or exercise.name == "달리기" %}
+                                        {{exercise.duration}}
+                                    {% else %}
+                                        {{ exercise.set_number }}세트 {{ exercise.repetition_count }}회
+                                    {% endif %}
+                                </p>
+                            </div>
                         </div>
-                        <div class="col-md-6 content-box"> <!-- 각 content-box를 col-md-6 클래스로 감싸기 -->
-                            <p style="font-size: 10">{{ exercise.description }}<br><br>{{ exercise.set_number }}세트 {{ exercise.repetition_count }}회</p>
+                    {% endif %}
+                    {% if exercise.name != "달리기" and exercise.name != "플랭크" %}
+                        <div class="start-buttons">
+                            <button type="button" class="btn btn-primary" id="start_exercise-{{ forloop.counter }}" data-exercise-name="{{ exercise.name }}">운동 시작</button>
                         </div>
-                    </div>
-                {% endif %}
-                <div class="start-buttons">
-                    <button type="button" class="btn btn-primary" id="start_exercise">운동 시작</button>
+                    {% endif %}
+                    
+                    {% if exercise.name == "플랭크" or exercise.name == "달리기" %}
+                        <div class="action-buttons">
+                            <button type="button" class="btn btn-secondary" id="exer-duration">{{exercise.duration}}</button>
+                        </div>
+                    {% else %}
+                        <div class="action-buttons">
+                            <button type="button" class="btn btn-secondary" id="set-{{ forloop.counter }}">세트</button>
+                            <button type="button" class="btn btn-secondary" id="repet-{{ forloop.counter }}">회</button>
+                        </div>
+                    {% endif %}
+                    
                 </div>
-                
-                <div class="action-buttons">
-                    <button type="button" class="btn btn-secondary" id="set">세트</button>
-                    <button type="button" class="btn btn-secondary" id="repet">회</button>
-                    <script>
-                        
-                    </script>
-                </div>
-                
-                {% if next_exercise %}
-                    <form style="margin-top: 30px; text-align: center;" method="get" action="{% url 'fitness:doExercise_with_id' category_id=category_id exercise_id=next_exercise.id %}">
-                        <button type="submit" class="btn-form" style="width:150px;height:50px;">Next Exercise</button>
-                    </form>
-                {% else %}
-                    <div style="text-align: center; margin-top: 40px;">
-                        <a href="{% url 'fitness:dailyStatistics' %}" class="btn btn-form">운동 끝내기</a>
-                    </div>
-                {% endif %}
+            {% endfor %}
+            <div class="col-md-6 offset-md-3 mt-5" style="text-align: center; margin-top: 30px;">
+                <button id="nextButton" class="btn-form" style="width:150px;height:50px;">다음 운동</button>
             </div>
+            <div class="col-md-6 offset-md-3 mt-5 endButton" style="text-align: center; margin-top: 40px;">
+                <a href="{% url 'fitness:dailyStatistics' %}" id="end-button" class="btn btn-form">운동 끝내기</a>
+            </div>
+            
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         let setNum = 0;
         let repetNum = 0;
 
-        async function startSet(check) {
-            let repet_num_db = {{ exercise.repetition_count }};
+        async function startSet(check, index, set_num_db) {
+            var element = document.getElementById("exercise-"+index); // 예시로 첫 번째 운동 요소를 가져옴
+            var exerciseName = element.dataset.exerciseName;
+            var setNumber = element.dataset.setNumber;
+            var repetNumber = element.dataset.repetitionCount;
+            let repet_num_db = repetNumber;
+            console.log("횟수: " + repet_num_db)
             for (let i = 0; i < repet_num_db; i++) {
-                document.getElementById("repet").innerHTML = ++repetNum + "회";
+                document.getElementById("repet-" + index).innerHTML = ++repetNum + "회";
                 document.getElementById("beep-sound").play();
                 await sleep(4000);
             }
-            if (check !== 2){
+            if (check !== set_num_db - 1) {
+                console.log(check, set_num_db)
                 let aud_break = document.getElementById("break");
                 aud_break.play();
                 return new Promise(resolve => {
                     aud_break.onended = async function() {
-                    await sleep(15000);
-                    aud_seconds5 = document.getElementById("seconds5")
-                    aud_seconds5.play();
-                    aud_seconds5.onended = async function(){
-                        resolve();
-                    }
+                        await sleep(2000);
+                        let aud_seconds5 = document.getElementById("seconds5");
+                        aud_seconds5.play();
+                        aud_seconds5.onended = async function() {
+                            resolve();
+                        }
                     };
                 });
-            }
-            else{
+            } else {
                 let aud_next_exer = document.getElementById("nextExer-sound");
                 aud_next_exer.play();
             }
-            
         }
 
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        function startExer() {
-            
-            let set_num_db = {{exercise.set_number}};
+        function startExer(index) {
+            var element = document.getElementById("exercise-"+index); // 예시로 첫 번째 운동 요소를 가져옴
+            var setNumber = element.dataset.setNumber;
+            let set_num_db = setNumber;
+            var exerciseName = element.dataset.exerciseName;
+            console.log("세트수: " + set_num_db)
             var aud = document.getElementById("prepare-sound");
             aud.play();
             aud.onended = async function() {
                 for (let i = 0; i < set_num_db; i++) {
                     repetNum = 0;
-                    document.getElementById("set").innerHTML = ++setNum + "세트";
-                    console.log(i +"번째 반복")
-                    await startSet(i);
+                    document.getElementById("set-" + index).innerHTML = ++setNum + "세트";
+                    console.log(i + "번째 반복")
+                    await startSet(i, index, set_num_db);
                 }
             };
         }
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            var currentExerciseIndex = 1; // 첫 번째 운동부터 시작
+            var totalExercises = {{ exercises|length }}; // 운동의 총 개수
 
-        document.getElementById('start_exercise').addEventListener('click', startExer);
-        document.getElementById("set").innerHTML = setNum + "세트";
-        document.getElementById("repet").innerHTML = repetNum + "회";
+            // 초기 설정: 첫 번째 운동을 표시
+            showExercise(currentExerciseIndex);
+
+            // "다음 운동" 버튼 클릭 시 다음 운동을 표시
+            document.getElementById("nextButton").addEventListener("click", function(event) {
+                event.preventDefault();
+                setNum = 0;
+                repetNum = 0;
+                
+                if (currentExerciseIndex+1 === totalExercises){
+                    var next_button = document.getElementById("nextButton");
+                    var end_button = document.getElementById("end-button");
+                    next_button.style.display = "none";
+                    end_button.style.display = "block";
+                }
+                if (currentExerciseIndex < totalExercises) {
+                    currentExerciseIndex++;
+                    showExercise(currentExerciseIndex);
+                }
+            });
+
+            function showExercise(index) {
+                var exercises = document.querySelectorAll('.exercise-item');
+                exercises.forEach(function(exercise) {
+                    exercise.style.display = "none";
+                });
+
+                // 현재 운동 표시
+                var currentExercise = document.getElementById("exercise-" + index);
+                currentExercise.style.display = "block";
+
+                var startElement = document.getElementById('start_exercise-' + index)
+                {% comment %} var exer_name = startElement.dataset.exerciseName
+                alert(exer_name) {% endcomment %}
+                {% comment %} if (startElement.dataset.exerciseName) {% endcomment %}
+                
+                if (startElement){
+                    startElement.addEventListener('click', function() {
+                        startExer(index);
+                    });
+                }
+                
+                
+                {% comment %} document.getElementById("set-" + index).innerHTML = setNum + "세트";
+                document.getElementById("repet-" + index).innerHTML = repetNum + "회"; {% endcomment %}
+                var setElement = document.getElementById("set-" + index);
+                if (setElement) {
+                    setElement.innerHTML = setNum + "세트";
+                }
+
+                var repetElement = document.getElementById("repet-" + index);
+                if (repetElement) {
+                    repetElement.innerHTML = repetNum + "회";
+                }
+
+                if (index === totalExercises) {
+                    document.getElementById("nextButton").disabled = true;
+                } else {
+                    document.getElementById("nextButton").disabled = false;
+                }
+            }
+        });
     </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

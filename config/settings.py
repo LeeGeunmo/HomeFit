@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "apps.community",
     "apps.group",
     "apps.post",
+    "sslserver",
 ]
 
 MIDDLEWARE = [

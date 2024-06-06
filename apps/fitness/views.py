@@ -79,43 +79,35 @@ def startExercise(request):
             running = Exercise.objects.filter(category=running_category)
             exercises_list.extend(running)
             exercises = exercises_list
-
+            
+            print(exercises)
     else:
         exercises = Exercise.objects.all()
+        
+    request.session['exercises'] = [exercise.id for exercise in exercises]
+        
+    context = {
+        'category' : exerciseCategory,
+        'exercises' : exercises
+    }
+    
+    return render(request, 'fitness/startExercise.html',context)
 
-    context = {"category": exerciseCategory, "exercises": exercises}
-
-    return render(request, "fitness/startExercise.html", context)
-
-
-def doExercise(request, category_id=None, exercise_id=None):
+def doExercise(request, exercise_id = None):
     exercises = Exercise.objects.none()
     exercise = None
     next_exercise = None
-
-    if category_id:
-        exerciseCategory = get_object_or_404(ExerciseCategory, id=category_id)
-        if int(category_id) == 1:
-            exercises = Exercise.objects.all()
-        else:
-            exercises = Exercise.objects.filter(category=exerciseCategory)
-
-        if exercise_id is None:
-            exercise = exercises.first()
-        else:
-            exercise = get_object_or_404(exercises, id=exercise_id)
-
-        next_exercise = (
-            exercises.filter(id__gt=exercise.id).first() if exercise else None
-        )
-
-    else:
-        exercises = Exercise.objects.all()
-
+        
+    exercises_ids = request.session.get('exercises', [])
+        
+    if exercises_ids:
+        exercises = Exercise.objects.filter(id__in=exercises_ids)
+        print(exercises)
+    if 'exercises' in request.session:
+        del request.session['exercises']
+            
     context = {
-        "category_id": category_id,
-        "exercise": exercise,
-        "next_exercise": next_exercise,
+        'exercises': exercises,
     }
 
     return render(request, "fitness/doExercise.html", context)

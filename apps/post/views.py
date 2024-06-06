@@ -1,15 +1,19 @@
-from django.shortcuts import render
-
 # Create your views here.
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post
 from django.utils import timezone
+from apps.group.models import Group
 
 
 def main(request):
     posts=Post.objects.all()
+    groups = Group.objects.all()
     print(posts)
-    return render(request, 'community/main.html', {"posts": posts})
+    context = {
+        'posts' : posts,
+        'groups' : groups,
+    }
+    return render(request, 'community/main.html', context)
 
 def create_post(request):
     if request.method == 'POST':
@@ -18,10 +22,15 @@ def create_post(request):
         # 게시글 생성
         if content:
             Post.objects.create(content=content, user=request.user)
+            return redirect('post:main')
         
-    
+    groups = Group.objects.all()
     posts = Post.objects.all()
-    return render(request, 'community/main.html', {"posts": posts})
+    context = {
+        'posts' : posts,
+        'groups' : groups,
+    }
+    return render(request, 'community/main.html', context)
 
 def edit_post(request, post_id) :
     post=get_object_or_404(Post,pk=post_id)
@@ -33,7 +42,7 @@ def edit_post(request, post_id) :
         if content:
             post.content = content
             post.save()
-            return redirect('community:main')
+            return redirect('post:main')
     return render(request, 'community/edit.html', {"post": post})
 
 def delete_post(request,post_id) :
@@ -44,6 +53,7 @@ def delete_post(request,post_id) :
         #posts=Post.objects.filter(post_id)
         print(post_id)
         posts=Post.objects.all()
+        return redirect('post:main')
     return render(request, 'community/main.html', {"posts": posts})
 
 
@@ -52,4 +62,3 @@ def post_list(request):
     posts=Post.objects.all()
     print(posts)
     return render(request, 'community/main.html', {"posts": posts})
-
