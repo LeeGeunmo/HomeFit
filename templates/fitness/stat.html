@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>운동 통계</title>
     <link
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -23,6 +24,10 @@
       }
       .list-group-item {
         font-size: 24px;
+      } 
+      #exerciseChart {
+        max-width: 100%;
+        height: 400px; /* 원하는 높이로 설정 */
       }
     </style>
   </head>
@@ -55,6 +60,7 @@
         </div>
       </div>
 
+
       <br />
       <hr />
       <br />
@@ -74,8 +80,15 @@
         </li>
         {% endfor %}
       </ul>
+
+      
+      <div class="d-flex justify-content-center mt-4 mb-4">
+        <a href="/user/main" class="btn btn-dark">확인</a>
+      </div>
     </div>
 
+
+    
     <script>
       const ctx = document.getElementById('exerciseChart').getContext('2d');
       const exerciseChart = new Chart(ctx, {
