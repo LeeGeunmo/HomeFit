@@ -43,7 +43,8 @@ def delete_post(request,post_id) :
         post.delete()
         #posts=Post.objects.filter(post_id)
         print(post_id)
-    return render(request, 'community/main.html', {"post": post})
+        posts=Post.objects.all()
+    return render(request, 'community/main.html', {"posts": posts})
 
 
 def post_list(request):
