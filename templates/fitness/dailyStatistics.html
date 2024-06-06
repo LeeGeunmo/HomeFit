@@ -1,66 +1,57 @@
 <!DOCTYPE html>
-<html lang="ko">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Survey Form</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .progress-bar-container {
-            display: flex;
-            margin-bottom: 20px;
-        }
-
-        .progress-bar-box {
-            flex: 1;
-            height: 100px;
-            background-color: #e0e0e0;
-            margin-right: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .progress-bar-box:last-child {
-            margin-right: 0;
-        }
-
-        .survey-question {
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-
-<body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>오늘의 운동 통계</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     {% include './header.html' %}
-    <div class="container">
-        <h2 class="text-center mb-4">운동 결과</h2>
-        <div class="progress-bar-container">
-            <div class="progress-bar-box">팔굽혀펴기</div>
-            <div class="progress-bar-box">턱걸이</div>
-            <div class="progress-bar-box">스쿼트</div>
-            <div class="progress-bar-box">윗몸일으키기</div>
-            <div class="progress-bar-box">런지</div>
-            <div class="progress-bar-box">딥스</div>
-            <div class="progress-bar-box">레그레이즈</div>
-        </div>
-        <div class="survey-question">
-            <h4 class="text-center mb-4"><b class="highlight">O</b>kcal 나 소모하셨네요!</h4>
-        </div>
-        <div class="survey-question">
-            <h4 class="text-center mb-4">지난 운동에 비해<b class="highlight">O</b> 번 증가하였습니다.</h4>
-        </div>
-        <div class="survey-question">
-            <h4 class="text-center mb-4">정자세가 비율이 <b class="highlight">O</b>% 입니다.</h4>
-        </div>
-        <form action="{% url 'user:main'%}" style="text-align: center;">
-            <button class="btn btn-primary" type="submit" style="margin-top: 20px;">확인</button>
-        </form>
-        
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    </div>
-</body>
+    <div class="container mt-5">
+      <h1 class="mb-4 text-center">{{ user.username }}님의 오늘의 운동 통계</h1>
+      <hr />
+      <br />
 
+      <h2 class="mb-4 text-center">운동 요약</h2>
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title text-center">오늘의 운동 요약</h5>
+          <p class="card-text">
+            오늘 소모된 총 칼로리: {{ total_calories }} kcal
+          </p>
+        </div>
+      </div>
+
+      <br />
+      <hr />
+      <br />
+
+      <h2 class="mb-4 text-center">전체 운동 기록</h2>
+      <div class="row">
+        {% for exercise_set in today_exercise_sets %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ exercise_set.exercise.name }}</h5>
+              <p class="card-text">
+                <strong>세트 수:</strong> {{ exercise_set.set_number }}<br />
+                <strong>반복 횟수:</strong> {{exercise_set.repetition_count}}<br />
+                
+              </p>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <p>오늘 기록된 운동이 없습니다.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </body>
 </html>
