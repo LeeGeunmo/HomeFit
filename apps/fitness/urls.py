@@ -9,8 +9,8 @@ urlpatterns = [
     path('stat/', views.stat, name='stat'),
     path('startExercise/', views.startExercise, name='startExercise'),
     path('doExercise/', views.doExercise, name='doExercise'),
-    path('doExercise/<int:category_id>/', views.doExercise, name='doExercise_with_category'),
-    path('doExercise/<int:category_id>/<int:exercise_id>', views.doExercise, name='doExercise_with_id'),
+    path('doExercise/<int:exercise_id>/', views.doExercise, name='doExercise_with_id'),
+    # path('doExercise/<int:category_id>/<int:exercise_id>', views.doExercise, name='doExercise_with_id'),
     path('dailyStatistics/', views.statAll, name='dailyStatistics'),
     path('saveExerciseSet/', views.saveExerciseSet, name='saveExerciseSet'),
     

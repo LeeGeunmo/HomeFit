@@ -33,26 +33,8 @@
             <h4 style="text-align: center; color: rgb(38, 51, 163) ;">{{exercise.name}}</h1>
         {% endfor %}
         <div style="text-align: center; margin-top: 30px;">
-            <a href="{%url 'fitness:doExercise_with_category' category_id=category.id %}" class="btn btn-form">운동 시작</a>
+            <a href="{%url 'fitness:doExercise'%}" class="btn btn-form">운동 시작</a>
         </div>
-        {% comment %} <div class="row">
-            <div class="col-md-3 step-card">팔굽혀펴기</div>
-            <div class="col-md-1 arrow">&rarr;</div>
-            <div class="col-md-2 step-card">턱걸이</div>
-            <div class="col-md-1 arrow">&rarr;</div>
-            <div class="col-md-2 step-card">스쿼트</div>
-            <div class="col-md-1 arrow">&rarr;</div>
-            <div class="col-md-2 step-card">윗몸일으키</div>
-        </div>
-        <div class="row mt-3">
-            <div class="col-md-2 step-card">런지</div>
-            <div class="col-md-1 arrow">&rarr;</div>
-            <div class="col-md-2 step-card">딥스</div>
-            <div class="col-md-1 arrow">&rarr;</div>
-            <div class="col-md-2 step-card">레그레이즈</div>
-            <div class="col-md-1 arrow">&rarr;</div>
-            <div class="col-md-2 step-card">크런치</div>
-        </div> {% endcomment %}
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
