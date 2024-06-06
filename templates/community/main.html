@@ -100,10 +100,24 @@
     <div class="container">
       <h1 class="mt-4 mb-5 text-center">Community</h1>
       <div class="context">
-        <div class="col-md-8 ">
+        <div class="col-md-8">
+
           <div class="border">
-            {% for post in posts %}
-              <div class="content-box">{{post.content}}</div>
+              {% for post in posts %}
+              <div class="content-box">
+                <p>작성자: {{ post.user }}</p> 
+                {{post.content}}
+                <div class="post-options">
+                  <form method="POST" action="{% url 'post:edit_post' post.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-info float-right">수정</button>
+                  </form>
+                  <form method="POST" action="{% url 'post:delete_post' post.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-danger float-right">삭제</button>
+                  </form>
+                </div>
+              </div>
             {% endfor %}
           </div>
           <form method="POST" action="{% url 'post:create_post' %}">
@@ -119,7 +133,7 @@
             <div style="font-size: 20px; padding-top:10px; font-weight: bolder;">
               {% if groups %}
                 {% for group in groups %}
-                  {{ group.name }}
+                  그룹 : {{ group.name }}
                 {% endfor %}
               {% else %}
                 <div>그룹 추가하기</div>
@@ -127,13 +141,13 @@
             </div>
             <hr />
             <div class="list-group list-group-flush member-div">
-              {% for group in groups %}
-                <div class="member">{{group.member_names}}</div>
+              {% for member in members %}
+                <div class="member">{{member}}</div>
               {% endfor %}
             </div>
             <hr />
             <div class="button-style">
-              {% if not group.group_name %}
+              {% if not groups %}
                 <form method="POST" action="{% url 'group:check_group' %}" style="display: flex; justify-content: center; align-items: center;">
                   {% csrf_token %}
                   <input style="margin: 5px 0px;height:35px; border-radius: 5px;" name="group_name" type="text" placeholder="group name">
@@ -142,7 +156,7 @@
               {% else %}
                 <form method="POST" action="{% url 'group:check_group_member' %}" style="display: flex; justify-content: center; align-items: center;">
                   {% csrf_token %}
-                  <input type="hidden" name="group_name" value="{{ group_name }}">
+                  <input type="hidden" name="group_name" value={% for group in groups %}"{{ group.name }}"{% endfor %}>
                   <button type="submit" style="background-color: red; border-color: red;" class="btn btn-form">그룹 나가기</button>
                 </form>
               {% endif %}
