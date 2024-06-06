@@ -110,11 +110,11 @@
                 <div class="post-options">
                   <form method="POST" action="{% url 'post:edit_post' post.id %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-info">수정</button>
+                    <button type="submit" class="btn btn-sm btn-info float-right">수정</button>
                   </form>
                   <form method="POST" action="{% url 'post:delete_post' post.id %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-sm btn-danger">삭제</button>
+                    <button type="submit" class="btn btn-sm btn-danger float-right">삭제</button>
                   </form>
                 </div>
               </div>

@@ -1,71 +1,107 @@
 <!DOCTYPE html>
-<html lang="ko">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>운동 통계분석</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>운동 통계</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .container {
-            margin-top: 50px;
-        }
-
-        .progress-bar-container {
-            display: flex;
-            margin-bottom: 20px;
-        }
-
-        .progress-bar-box {
-            flex: 1;
-            height: 100px;
-            background-color: #e0e0e0;
-            margin-right: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .progress-bar-box:last-child {
-            margin-right: 0;
-        }
-
-        .survey-question {
-            margin-bottom: 10px;
-        }
+      .text-center {
+        text-align: center;
+      }
+      .card-text {
+        font-size: 1.5rem;
+      }
+      .container {
+        max-width: 95%;
+      }
+      .card-title {
+        font-size: 32px;
+      }
+      .list-group-item {
+        font-size: 24px;
+      }
     </style>
-</head>
-
-<body>
+  </head>
+  <body>
     {% include './header.html' %}
-    <div class="container">
-        <h2 class="text-center mb-4">일주일간 운동 현황</h2>
-        <div class="progress-bar-container">
-            <div class="progress-bar-box"></div>
-            <div class="progress-bar-box"></div>
-            <div class="progress-bar-box"></div>
-            <div class="progress-bar-box"></div>
-            <div class="progress-bar-box"></div>
-            <div class="progress-bar-box"></div>
-            <div class="progress-bar-box"></div>
-        </div>
-        <div class="survey-question">
-            <h4 class="text-center mb-4"><b class="highlight">O</b> 일 연속으로 운동하셨어요.</h4>
-        </div>
-        <div class="survey-question">
-            <h4 class="text-center mb-4"><b class="highlight">O</b> 스쿼트를 좋아하시네요!</h4>
-        </div>
-        <div class="survey-question">
-            <h4 class="text-center mb-4"><b class="highlight">O</b> 지난 운동에 비해 <b class="highlight">O</b>번 증가였습니다.</h4>
-        </div>
-        <div class="survey-question">
-            <h4 class="text-center mb-4"><b class="highlight">O</b>정자세가 비율이 <b class="highlight">O</b>%입니다.</h4>
-        </div>
-        <div style="text-align: center;">
-            <button class="btn btn-primary">확인</button>
-        </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+    <div class="container mt-5">
+      <h1 class="mb-4 text-center">{{ user.username }}님의 운동 통계</h1>
+      <hr />
+      <br />
 
+      <h2 class="mb-4 text-center">운동 기록 분석</h2>
+      <canvas id="exerciseChart"></canvas>
+
+      <br />
+      <hr />
+      <br />
+
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title text-center">운동 요약</h5>
+          <p class="card-text">
+            일주일 동안 운동한 횟수: {{ exercise_count_this_week }}회
+          </p>
+          <p class="card-text">
+            가장 많이 한 운동: {{ most_frequent_exercise }}
+          </p>
+          <p class="card-text">
+            지난 주에 비해 운동 횟수: {{exercise_difference}}회 증가
+          </p>
+        </div>
+      </div>
+
+      <br />
+      <hr />
+      <br />
+
+      <h2 class="mb-4 text-center">운동 기록</h2>
+      <ul class="list-group">
+        {% for exercise_set in exercise_sets %}
+        <li class="list-group-item">
+          <strong>날짜:</strong> {{ exercise_set.date }}<br />
+          <strong>운동:</strong> {{ exercise_set.exercise.name }}<br />
+          <strong>세트 수:</strong> {{ exercise_set.set_number }}<br />
+          <strong>반복 횟수:</strong> {{ exercise_set.repetition_count }}
+        </li>
+        {% empty %}
+        <li class="list-group-item">
+          지난 일주일 동안 기록된 운동이 없습니다.
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <script>
+      const ctx = document.getElementById('exerciseChart').getContext('2d');
+      const exerciseChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'],
+              datasets: [{
+                  label: '운동 횟수',
+                  data: {{ weekday_counts|safe }},
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              scales: {
+                  y: {
+                      beginAtZero: true
+                  }
+              }
+          }
+      });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </body>
 </html>

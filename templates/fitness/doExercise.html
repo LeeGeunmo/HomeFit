@@ -201,7 +201,10 @@
                 currentExercise.style.display = "block";
 
                 var startElement = document.getElementById('start_exercise-' + index)
-                if ()
+                {% comment %} var exer_name = startElement.dataset.exerciseName
+                alert(exer_name) {% endcomment %}
+                {% comment %} if (startElement.dataset.exerciseName) {% endcomment %}
+                
                 if (startElement){
                     startElement.addEventListener('click', function() {
                         startExer(index);
