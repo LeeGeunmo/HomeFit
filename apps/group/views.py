@@ -33,6 +33,7 @@ def del_group(request) :
     group = get_object_or_404(Group, name=group_name)
     if group.members.filter(id=request.user.id).exists():
         group.delete()
+        return redirect('group:main')
     return redirect('group:main')
 
 def join_group(request):
