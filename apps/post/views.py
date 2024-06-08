@@ -3,9 +3,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post
 from django.utils import timezone
 from apps.group.models import Group
+from django.contrib.auth.decorators import login_required
 
-
+@login_required(login_url="/user/login/")
 def main(request):
+    user = request.user
     posts=Post.objects.all()
     groups = Group.objects.all()
     print(posts)

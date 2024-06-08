@@ -23,7 +23,7 @@ def selectRoutine(request):
         request, "fitness/selectRoutine.html", {"categories": exerciseCategory}
     )
 
-
+@login_required(login_url="/user/login/")
 def stat(request):
     user = request.user
     now = timezone.now()
@@ -93,48 +93,100 @@ def startExercise(request):
     
     return render(request, 'fitness/startExercise.html',context)
 
-def doExercise(request, exercise_id = None):
+@login_required(login_url="/user/login/")
+def doExercise(request, exercise_id=None):
+    user = request.user
     exercises = Exercise.objects.none()
     exercise = None
     next_exercise = None
-        
+    check = False
+    
     exercises_ids = request.session.get('exercises', [])
-        
+    
     if exercises_ids:
         exercises = Exercise.objects.filter(id__in=exercises_ids)
-        print(exercises)
+    print(exercises)
+    
+    activity_level = user.activity_level
+    goal = user.fitness_goal
+    
+    # 사용자 activity_level에 따라 운동 난이도 필터링
+    if activity_level == '0':
+        multiplier = 1.0
+    elif activity_level == '1-2':
+        multiplier = 1.3
+    elif activity_level == '3-4':
+        multiplier = 1.6
+    elif activity_level == '5-7':
+        multiplier = 2.0
+    else:
+        multiplier = 1.0  # 기본값 설정
+    
+    if goal == 'muscle_gain':
+        check = True
+        
+
+    # 반복 횟수를 배수로 조정
+    adjusted_exercises = []
+    for exercise in exercises:
+        if (exercise.repetition_count is not None or exercise.set_number is not None):
+            adjusted_exercise = exercise
+            adjusted_exercise.repetition_count = int(exercise.repetition_count * multiplier)
+            if (check):
+                adjusted_exercise.set_number = int(exercise.set_number + 1)
+            adjusted_exercises.append(adjusted_exercise)
+        else:
+            adjusted_exercises.append(exercise)
+    
     if 'exercises' in request.session:
         del request.session['exercises']
+    
+    
+    if adjusted_exercises:
+        if (adjusted_exercises[0].name == "달리기"):
+            first_exercise = adjusted_exercises.pop(0)
+            adjusted_exercises.append(first_exercise)
             
+    print(adjusted_exercises)
+        
+
     context = {
-        'exercises': exercises,
+        'exercises': adjusted_exercises,
     }
+    
 
     return render(request, "fitness/doExercise.html", context)
 
-
+@login_required(login_url="/user/login/")
 def saveExerciseSet(request):
     if request.method == "POST":
-        category_id = request.POST.get("category_id")
-        exercise_id = request.POST.get("exercise_id")
+        exercise_name = request.POST.get("exercise_name")
         set_number = request.POST.get("set_number")
         repetition_count = request.POST.get("repetition_count")
-        exercises = get_object_or_404(ExerciseCategory, id=category_id)
-        exercise = get_object_or_404(exercises, id=exercise_id)
-        ExerciseSet.objects.create(
+        exercise = get_object_or_404(Exercise, name=exercise_name)
+        print(set_number,repetition_count)
+        if (int(set_number) != 0 or int(repetition_count) != 0):
+            ExerciseSet.objects.create(
             user=request.user,
             exercise=exercise,
             set_number=set_number,
             repetition_count=repetition_count,
-        )
-        return JsonResponse({"status": "success"})
+            )
+            print(request.user, exercise, set_number, repetition_count)
+        
+            return JsonResponse({"status": "success"})
+        
     return JsonResponse({"status": "fail"}, status=400)
 
 
 def statAll(request):
     user = request.user
     today = timezone.now().date()
+    print(today)
+
+# 현재 유저이고 오늘 운동한 ExerciseSet을 필터합니다.
     today_exercise_sets = ExerciseSet.objects.filter(user=user, date__date=today)
+    print(today_exercise_sets)
 
     total_calories = sum(
         es.exercise.calories_burned * es.set_number for es in today_exercise_sets

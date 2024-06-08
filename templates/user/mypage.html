@@ -24,15 +24,31 @@
             </div>
             <div class="mb-3">
                 <label for="username" class="form-label">키</label>
-                <input type="text" class="form-control" id="height" placehold="{{user.hegiht}}">
+                <input type="text" class="form-control" id="height" name="height" placeholder="{{user.height}}" value = "{{user.height}}">
             </div>
-            <div class="mb-5">
+            <div class="mb-3">
                 <label for="username" class="form-label">몸무게</label>
-                <input type="text" class="form-control" id="weight" placehold="{{user.weight}}">
+                <input type="text" class="form-control" id="weight" name="weight" placeholder="{{user.weight}}" value="{{user.weight}}">
+            </div>
+            <div class="mb-3">
+                <label for="fitness_goal" class="form-label">피트니스 목표</label>
+                <select class="form-select" id="fitness_goal" name="fitness_goal">
+                    <option value="muscle_gain" {% if user.fitness_goal == "muscle_gain" %} selected {% endif %}>근성장</option>
+                    <option value="diet" {% if user.fitness_goal == "diet" %} selected {% endif %}>다이어트</option>
+                    <option value="bulk_up" {% if user.fitness_goal == "bulk_up" %} selected {% endif %}>벌크업</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="activity_level" class="form-label">운동 빈도</label>
+                <select class="form-select" id="activity_level" name="activity_level">
+                    <option value="0" {% if user.activity_level == '0' %} selected {% endif %}>주 0회</option>
+                    <option value="1-2" {% if user.activity_level == '1-2' %} selected {% endif %}>주 1-2회</option>
+                    <option value="3-4" {% if user.activity_level == '3-4' %} selected {% endif %}>주 3-4회</option>
+                    <option value="5-7" {% if user.activity_level == '5-7' %} selected {% endif %}>주 5-7회</option>
+                </select>
             </div>
             <div class="button-style">
                 <button type="submit" class="btn btn-dark" action={% url "user:mypage" %}>변경 저장</button>
-                <button type="submit" class="btn btn-dark">회원 탈퇴</button>
             </div>
         </form>
     </div>

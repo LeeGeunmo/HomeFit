@@ -12,4 +12,5 @@ urlpatterns = [
     path('additional/fitness_goal/', views.additional_fitness_goal, name='additional_fitness_goal'),
     path('additional/activity_level/', views.additional_activity_level, name='additional_activity_level'),
     path('mypage/', views.mypage, name='mypage'),
+    
 ]

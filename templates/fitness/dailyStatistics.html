@@ -8,6 +8,20 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <style>
+        .card-text{
+            display: flex;
+            justify-content: center;
+        }
+        .text-center{
+            display: flex;
+            justify-content: center;
+        }
+        .card-title{
+            display: flex;
+            justify-content: center;
+        }
+    </style>
   </head>
   <body>
     {% include './header.html' %}
@@ -32,24 +46,28 @@
       <br />
 
       <h2 class="mb-4 text-center">전체 운동 기록</h2>
-      <div class="row">
+      {% comment %} <div class="row"> {% endcomment %}
         {% for exercise_set in today_exercise_sets %}
         <div class="col-md-4 mb-4">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">{{ exercise_set.exercise.name }}</h5>
               <p class="card-text">
-                <strong>세트 수:</strong> {{ exercise_set.set_number }}<br />
-                <strong>반복 횟수:</strong>
+                <strong >세트 수:</strong> {{ exercise_set.set_number }}
+                <strong style="margin-left : 10px;">반복 횟수:</strong>
                 {{exercise_set.repetition_count}}<br />
               </p>
             </div>
           </div>
         </div>
         {% empty %}
-        <p>오늘 기록된 운동이 없습니다.</p>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title text-center">오늘 기록된 운동이 없습니다.</h5>
+            </div>
+        </div>
         {% endfor %}
-      </div>
+      {% comment %} </div> {% endcomment %}
 
       <div class="d-flex justify-content-center mt-4 mb-4">
         <a href="/user/main" class="btn btn-dark">확인</a>

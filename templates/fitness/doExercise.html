@@ -58,6 +58,21 @@
                 <div class="col-md-6 offset-md-3 mt-5 exercise-item" id="exercise-{{ forloop.counter }}" data-set-number="{{ exercise.set_number }}" data-repetition-count="{{ exercise.repetition_count }}" data-exercise-name="{{exercise.name}}" data-exercise-duration="{{exercise.duration}}">
                     {% if exercise.name == "스쿼트" %}
                         {% include 'fitness/squat.html' %}
+                        {% comment %} <div class="action-buttons" style="margin-bottom : 10px;">
+                            <button type="button" class="btn btn-secondary" id="set-{{ forloop.counter }}">세트</button>
+                            <button type="button" class="btn btn-secondary" id="repet-{{ forloop.counter }}">회</button>
+                        </div> {% endcomment %}
+                        <div class="row">
+                            <div class="col-md-6 content-box">
+                                <p style="font-size: 10">{{ exercise.description }}<br><br>
+                                    {% if exercise.name == "플랭크" or exercise.name == "달리기" %}
+                                        {{exercise.duration}}
+                                    {% else %}
+                                        {{ exercise.set_number }}세트 {{ exercise.repetition_count }}회
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
                     {% else %}
                         <h2 class="text-center mb-4">{{ exercise.name }}</h2>
                         <div class="row">
@@ -72,7 +87,7 @@
                             </div>
                         </div>
                     {% endif %}
-                    {% if exercise.name != "달리기" and exercise.name != "플랭크" %}
+                    {% if exercise.name != "달리기" and exercise.name != "플랭크" and exercise.name != "스쿼트"%}
                         <div class="start-buttons">
                             <button type="button" class="btn btn-primary" id="start_exercise-{{ forloop.counter }}" data-exercise-name="{{ exercise.name }}">운동 시작</button>
                         </div>
@@ -83,10 +98,13 @@
                             <button type="button" class="btn btn-secondary" id="exer-duration">{{exercise.duration}}</button>
                         </div>
                     {% else %}
-                        <div class="action-buttons">
-                            <button type="button" class="btn btn-secondary" id="set-{{ forloop.counter }}">세트</button>
-                            <button type="button" class="btn btn-secondary" id="repet-{{ forloop.counter }}">회</button>
-                        </div>
+                        {% if exercise.name != "스쿼트"%}
+                            <div class="action-buttons">
+                                <button type="button" class="btn btn-secondary" id="set-{{ forloop.counter }}">세트</button>
+                                <button type="button" class="btn btn-secondary" id="repet-{{ forloop.counter }}">회</button>
+                            </div>
+                        {% endif %}
+                        
                     {% endif %}
                     
                 </div>
@@ -94,19 +112,21 @@
             <div class="col-md-6 offset-md-3 mt-5" style="text-align: center; margin-top: 30px;">
                 <button id="nextButton" class="btn-form" style="width:150px;height:50px;">다음 운동</button>
             </div>
-            <div class="col-md-6 offset-md-3 mt-5 endButton" style="text-align: center; margin-top: 40px;">
-                <a href="{% url 'fitness:dailyStatistics' %}" id="end-button" class="btn btn-form">운동 끝내기</a>
+            <div class="col-md-6 offset-md-3 mt-5 endButton" style="text-align: center; margin-top: 40px; display:flex; justify-content:center;">
+                <button type= "button" id="end-button" class="btn btn-form" onclick = "saveExerciseSet()">운동 끝내기</button>
+                {% comment %} <a href="{% url 'fitness:dailyStatistics' %}" id="end-button" class="btn btn-form" action = "saveExerciseSet()">운동 끝내기</a> {% endcomment %}
             </div>
             
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         let setNum = 0;
         let repetNum = 0;
+        var currentExerciseIndex = 1;
+        var totalExercises = {{ exercises|length }}; // 운동의 총 개수
 
         async function startSet(check, index, set_num_db) {
             var element = document.getElementById("exercise-"+index); // 예시로 첫 번째 운동 요소를 가져옴
@@ -161,17 +181,52 @@
                 }
             };
         }
+        function saveExerciseSet() {
+            var element = document.getElementById("exercise-"+currentExerciseIndex);
+            var exerciseName = element.dataset.exerciseName;
+                var formData = {
+                    exercise_name: exerciseName,
+                    set_number: setNum,
+                    repetition_count: repetNum,
+                }
+                $.ajax({
+                    url: "{% url 'fitness:saveExerciseSet' %}",
+                    type: "POST",
+                    data: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        $("#responseMessage").text("저장 성공!").addClass("alert alert-success");
+                    },
+                    error: function(response) {
+                        $("#responseMessage").text("저장 실패!").addClass("alert alert-danger");
+                    }
+                });
+
+            if (currentExerciseIndex === totalExercises){
+                console.log(currentExerciseIndex,totalExercises)
+                var a = document.createElement('a');
+                a.href = "{% url 'fitness:dailyStatistics' %}";
+                a.click();
+            }
+        }
+
         
         document.addEventListener("DOMContentLoaded", function() {
-            var currentExerciseIndex = 1; // 첫 번째 운동부터 시작
-            var totalExercises = {{ exercises|length }}; // 운동의 총 개수
+            
+            
 
+            var element = document.getElementById("exercise-"+currentExerciseIndex);
+            var exerciseName = element.dataset.exerciseName;
             // 초기 설정: 첫 번째 운동을 표시
             showExercise(currentExerciseIndex);
 
             // "다음 운동" 버튼 클릭 시 다음 운동을 표시
             document.getElementById("nextButton").addEventListener("click", function(event) {
                 event.preventDefault();
+                saveExerciseSet();
+                
                 setNum = 0;
                 repetNum = 0;
                 
@@ -227,6 +282,7 @@
                     document.getElementById("nextButton").disabled = false;
                 }
             }
+            
         });
     </script>
 </body>
